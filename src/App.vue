@@ -1,29 +1,86 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="app-container">
+    <RenderFrame class="app-canvas" />
+    <div class="app-controls">
+      <div class="app-outlet">
+        <router-view/>
+      </div>
+      <NavigationMain />
+    </div>
+  </div>
 </template>
 
+<script setup lang="ts">
+import RenderFrame from '@/components/RenderFrame.vue';
+import NavigationMain from '@/components/NavigationMain.vue';
+</script>
+
 <style lang="scss">
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root, body, #app {
+ width: 100vw;
+ height: 100vh;
+ margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  .app-canvas {
+    width: 100vw;
+    height: 100vw;
+  }
 
-    &.router-link-exact-active {
-      color: #42b983;
+  .app-controls {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    flex-grow: 1;
+    max-height: calc(100vh - 100vw);
+
+    .app-outlet {
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+  }
+
+  @media (max-aspect-ratio: 2/3) {
+    .app-canvas {
+      height: 125vw;
+    }
+
+    .app-controls {
+      max-height: calc(100vh - 125vw);
+    }
+  }
+
+  // change flex direction based on aspect ratio
+  @media (min-aspect-ratio: 3/2) {
+    flex-direction: row;
+    height: 100vh;
+
+    .app-canvas {
+      min-width: 100vh;
+      height: 100vh;
+      flex-grow: 1;
+    }
+
+    .app-controls {
+      min-width: 25vw;
+      width: unset;
+      max-height: 100vh;
     }
   }
 }
