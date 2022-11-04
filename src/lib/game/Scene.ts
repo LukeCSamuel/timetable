@@ -1,4 +1,4 @@
-import { GameObject } from '@/lib/game/GameObject';
+import { GameObject } from '@/lib/game/objects/GameObject';
 import { Constructor } from '@/lib/types/Constructor';
 
 export class Scene {
@@ -8,6 +8,14 @@ export class Scene {
     for (const object of this.gameObjects) {
       if (composition.every(c => object.hasComposable(c))) {
         yield object as GameObject<T>;
+      }
+    }
+  }
+
+  *objectsByType<T> (Type: Constructor<T>) {
+    for (const object of this.gameObjects) {
+      if (object instanceof Type) {
+        yield object as T;
       }
     }
   }

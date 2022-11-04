@@ -1,15 +1,18 @@
 import { GraphNode } from '@/lib/graph/GraphNode';
 import { Artist } from '@/lib/graphics/artists/Artist';
 import { GraphicsProxy } from '@/lib/graphics/GraphicsProxy';
+import { ConnectionStyleProvider } from '@/lib/styles/ConnectionStyleProvider';
 
-export class ConnectionArtist extends Artist<[GraphNode]> {
-  composition = [GraphNode] as const;
+export class ConnectionArtist extends Artist<[GraphNode, ConnectionStyleProvider]> {
+  composition = [GraphNode, ConnectionStyleProvider] as const;
 
-  draw ([node]: [GraphNode], graphics: GraphicsProxy) {
-    graphics.lineWidth = 1;
+  draw ([node, { getStyle }]: [GraphNode, ConnectionStyleProvider], graphics: GraphicsProxy) {
+    const { color, width } = getStyle();
+
+    graphics.lineWidth = width;
+    graphics.context.strokeStyle = color;
 
     if (node.isTerminus) {
-      graphics.context.strokeStyle = '#555';
       const connections = node.terminalConnections;
       if (connections.length > 0) {
         for (const a of connections) {
@@ -22,7 +25,6 @@ export class ConnectionArtist extends Artist<[GraphNode]> {
         }
       }
     } else {
-      graphics.context.strokeStyle = '#000';
       const connections = node.connections;
       if (connections.length > 0) {
         for (const [a, b] of connections) {

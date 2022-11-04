@@ -14,7 +14,7 @@ export class GameObject<T> {
     }
   }
 
-  addComposable<U extends T> (Type: Constructor<U>, value: U) {
+  setComposable<U extends T> (Type: Constructor<U>, value: U) {
     this._composition.set(Type, value);
   }
 
@@ -29,7 +29,7 @@ export class GameObject<T> {
   static create<T extends any[]> (composables: T): GameObject<UnionOfTuple<T>> {
     const object = new GameObject();
     for (let i = 0; i < composables.length; i++) {
-      object.addComposable(composables[i].constructor, composables[i]);
+      object.setComposable(composables[i].constructor, composables[i]);
     }
     return object as any;
   }

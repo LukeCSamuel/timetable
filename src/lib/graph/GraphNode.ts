@@ -11,11 +11,6 @@ export interface ConnectionDescription {
   end: End
 }
 
-export interface NodeStyle {
-  color: string
-  radius: number
-}
-
 export class GraphNode {
   private static count = 0;
   private id = GraphNode.count++;
@@ -66,17 +61,25 @@ export class GraphNode {
     }
   }
 
-  get style (): NodeStyle {
-    if (this.isTerminus) {
-      return {
-        color: '#08c',
-        radius: 1,
-      };
+  /**
+   * Gets a list of all nodes connected to this node
+   */
+  get allConnectedNodes () {
+    return this[End.left].concat(this[End.right]);
+  }
+
+  /**
+   * Determines the direction of travel from the given node to this node
+   * (i.e. what direction can be accessed if the given node was last visited)
+   * @param node The connected node to search for
+   */
+  directionFromNode (node: GraphNode): End | null {
+    if (this[End.left].find(n => n === node)) {
+      return End.right;
+    } else if (this[End.right].find(n => n === node)) {
+      return End.left;
     } else {
-      return {
-        color: '#0c8',
-        radius: 0.16,
-      };
+      return null;
     }
   }
 

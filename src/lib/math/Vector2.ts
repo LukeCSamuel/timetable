@@ -13,7 +13,7 @@ export class Vector2 {
       this.x = x;
       this.y = y ?? 0;
     } else if (x) {
-      return Vector2.cast(x);
+      return Vector2.cast(x, true);
     }
   }
 
@@ -58,13 +58,22 @@ export class Vector2 {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
+  unit (): Vector2 {
+    return this.scale(1 / this.magnitude());
+  }
+
   dist (a: PointLike): number {
     const b = this.subtract(a);
     return b.magnitude();
   }
 
-  static cast (p: PointLike): Vector2 {
-    if (p instanceof Vector2) {
+  eq (a: PointLike): boolean {
+    const b = Vector2.cast(a);
+    return this.x === b.x && this.y === b.y;
+  }
+
+  static cast (p: PointLike, createNewInstance = false): Vector2 {
+    if (p instanceof Vector2 && !createNewInstance) {
       return p;
     } else if (Array.isArray(p)) {
       return new Vector2(...p);

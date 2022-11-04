@@ -5,6 +5,8 @@ export class VirtualClock {
 
   secondsPerTick = this._tickRate / 240;
 
+  private _onTick: ((tick: number) => void)[] = [];
+
   /**
    * The current time, in seconds
    */
@@ -41,6 +43,9 @@ export class VirtualClock {
     if (!this._interval) {
       this._interval = setInterval(() => {
         this._ticks++;
+        for (const listener of this._onTick) {
+          listener(this._ticks);
+        }
       }, 1000 / this.tickRate);
     }
   }
@@ -61,5 +66,13 @@ export class VirtualClock {
   reset () {
     this.pause();
     this._ticks = 0;
+  }
+
+  addTickListener (f: (tick: number) => void) {
+    this._onTick.push(f);
+  }
+
+  removeTickListener (f: (tick: number) => void) {
+    this._onTick = this._onTick.filter(o => o !== f);
   }
 }
