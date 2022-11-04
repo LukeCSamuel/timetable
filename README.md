@@ -1,4 +1,6 @@
-# timetable
+# TimeTable
+
+In this project, I use Vue 3 and the Canvas API to create a simulation of a transit network.  The goal is to implement a time-tabling feature that allows the scheduling of transit vehicles, avoiding conflicts.
 
 ## Project setup
 ```
@@ -20,5 +22,7 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Unit tests
+```
+yarn test
+```
